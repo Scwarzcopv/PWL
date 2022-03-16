@@ -57,11 +57,11 @@
 			<div class="input-group pt-lg-5">
 				<div class="input-group input-group-lg">
 					<span class="input-group-text fw-bolder text-dark">Bil - 1</span>
-					<input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg" placeholder="Input Bilangan Pertama" name="bil1">
+					<input type="number" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg" placeholder="Input Bilangan Pertama" name="bil1">
 				</div>
 				<div class="input-group input-group-lg pt-2 pt-lg-3">
 					<span class="input-group-text fw-bolder text-dark" >Bil - 2</span>
-					<input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg" placeholder="Input Bilangan Kedua" name="bil2">
+					<input type="number" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg" placeholder="Input Bilangan Kedua" name="bil2">
 				</div>
 				<div class="input-group input-group-lg pt-2 pt-lg-3">
 					<select class="form-select rounded-3 me-2 me-lg-3" name="operasi">
