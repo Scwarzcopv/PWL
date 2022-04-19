@@ -49,16 +49,16 @@
                             <li class="nav-item text-center">
                                 <?php 
                                 if (isset($_SESSION['email'])) {
-                                    echo "<a class='nav-link btn btn-primary rounded-pill px-5 text-light' href='config/logout.php'>Log Out</a>";
+                                    echo "<a class='nav-link btn btn-primary rounded-pill px-5 text-light' href='../config/logout.php'>Log Out</a>";
                                 } else {
-                                    echo "<a class='nav-link btn btn-primary rounded-pill px-5 m-right-1 mm-bottom-1 text-light' href='pages/regis.php'>Register</a>";
+                                    echo "<a class='nav-link btn btn-primary rounded-pill px-5 m-right-1 mm-bottom-1 text-light' href='../pages/regis.php'>Register</a>";
                                 }
                                 ?>
                             </li>
                             <li class="nav-item text-center">
                                 <?php 
                                 if (!isset($_SESSION['email'])) {
-                                    echo "<a class='nav-link btn btn-primary rounded-pill px-5 text-light' href='pages/login.php'>Log In</a>";
+                                    echo "<a class='nav-link btn btn-primary rounded-pill px-5 text-light' href='../pages/login.php'>Log In</a>";
                                 }
                                 ?>
                             </li>
