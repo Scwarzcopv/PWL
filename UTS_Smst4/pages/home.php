@@ -91,7 +91,7 @@
             <div class="container my-5">
                 <div class="row justify-content-center align-items-center">
                     <div class="col-11 col-sm-8 col-md-6 col-lg-4 bg-custom2 p-5 rounded shadowgreen border">
-                        <a href="user.php" class="btn btn-primary px-5 mt-3 mx-auto">User</a>
+                        <a href="users.php" class="btn btn-primary px-5 mt-3 mx-auto">User</a>
                         <a href="barang.php" class="btn btn-primary px-5 mt-3 mx-auto">Barang</a>
                     </div>
                 </div>
