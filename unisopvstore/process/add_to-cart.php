@@ -34,7 +34,12 @@ if (isset($_SESSION['username'])) {
 		}
 
 		if ($already == false) {
-			$sql = "INSERT INTO cart (username, id_produk) VALUES ('$username', '$id_produk')";
+			$sql_product = "SELECT * FROM produk WHERE id_produk = '$id_produk'";
+			$res_product = mysqli_query($conn,$sql_product);
+			$row = mysqli_fetch_assoc($res_product);
+			$harga = $row['harga_produk'];
+
+			$sql = "INSERT INTO cart (username, id_produk, harga) VALUES ('$username', '$id_produk', '$harga')";
 			$result = mysqli_query($conn, $sql);
 		}
 		else {

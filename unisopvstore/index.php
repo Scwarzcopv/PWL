@@ -27,7 +27,7 @@
 	<script src="https://unpkg.com/cropperjs"></script>
 	<link rel="stylesheet" href="css/style.css">
 </head>
-<body style="overflow-x: hidden;">
+<body class="d-flex flex-column min-vh-100" style="overflow-x: hidden;">
 	<!-- NAVBAR 1 -->
 	<nav class="navbar navbar-dark bg-dark text-light ">
 		<div class="container">
@@ -180,7 +180,7 @@ else {
 					<i class="fa-solid fa-heart badge-cart" id="show_wishlist" value="<?php echo intval($total_item_wishlist); ?>"></i>
 				</a>
 				<!-- show cart -->
-				<a class="btn btn-cart btn-dark btn-dark-custom rounded-circle pt-2" href="">
+				<a class="btn btn-cart btn-dark btn-dark-custom rounded-circle pt-2" href="pages/cart.php">
 					<i class="d-none" id="show_cart_primary" value="<?php echo intval($total_item_cart); ?>"></i>
 					<i class="fa-solid fa-cart-shopping badge-cart" id="show_cart" value="<?php echo intval($total_item_cart); ?>"></i>
 				</a>
@@ -281,9 +281,9 @@ else {
 	<!-- PRODUCT -->
 	<div class="container mt-4 mt-md-5 pt-md-3 text-center">
 		<div class="anchor-stickynav" id="product"></div>
-		<div class="h4 text-center fw-bolder text-secondary p-0 m-0">
+		<h4 class="text-center fw-bolder text-secondary p-0 m-0">
 			New Product
-		</div>
+		</h4>
 		<div class="h2 text-center fw-bolder text-secondary p-0 m-0">
 			LATEST UPDATE @UNISOPV-STORE
 		</div>
@@ -365,10 +365,11 @@ if (isset($_SESSION['username'])) {
 		<a href="pages/product.php#product" class="btn btn-lg btn-outline-dark fw-bolder mt-md-3 rounded-0" data-aos="fade-right">Show More <i class="fa-solid fa-angles-right"></i></a>
 	</div>
 	<!-- FOOTER -->
+	<footer class="mt-auto">
 	<div class="container mt-3 mt-md-5 pt-md-3 text-center">
-		<div class="h4 text-center fw-bolder text-secondary p-0 m-0">
+		<h4 class="text-center fw-bolder text-secondary p-0 m-0">
 			Social Media
-		</div>
+		</h4>
 		<div class="h2 text-center fw-bolder text-secondary p-0 m-0">
 			Contact Me @UNISOPV-STORE
 		</div>
@@ -412,6 +413,7 @@ if (isset($_SESSION['username'])) {
 			</div>
 		</div>
 	</div>
+	</footer>
 
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>

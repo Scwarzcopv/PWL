@@ -33,7 +33,7 @@ if (!isset($_SESSION['username'])) {
 <html lang="en" >
 <head>
 	<meta charset="UTF-8">
-	<title>Shop - UnisopvStore</title>
+	<title>Wishlist - UnisopvStore</title>
 	<link rel="icon" href="../images/icon.png">
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -49,7 +49,7 @@ if (!isset($_SESSION['username'])) {
 	<script src="https://unpkg.com/cropperjs"></script>
 	<link rel="stylesheet" href="../css/style.css">
 </head>
-<body style="overflow-x: hidden;">
+<body class="d-flex flex-column min-vh-100" style="overflow-x: hidden;">
 	<!-- NAVBAR 1 -->
 	<nav class="navbar navbar-dark bg-dark text-light ">
 		<div class="container">
@@ -228,7 +228,7 @@ else {
 					<i class="fa-solid fa-heart badge-cart" id="show_wishlist" value="<?php echo intval($total_item_wishlist); ?>"></i>
 				</a>
 				<!-- show cart-->
-				<a class="btn btn-cart btn-dark btn-dark-custom rounded-circle pt-2" href="">
+				<a class="btn btn-cart btn-dark btn-dark-custom rounded-circle pt-2" href="cart.php">
 					<i class="d-none" id="show_cart_primary" value="<?php echo intval($total_item_cart); ?>"></i>
 					<i class="fa-solid fa-cart-shopping badge-cart" id="show_cart" value="<?php echo intval($total_item_cart); ?>"></i>
 				</a>
@@ -236,7 +236,7 @@ else {
 		</div>
 	</nav>
 	<!-- NAVBAR 3 -->
-	<nav class="navbar navbar-expand-md navbar-light bg-danger text-dark fw-bold py-0 sticky-top" style="font-family: serif;">
+	<nav class="navbar navbar-expand-md navbar-light bg-danger text-dark fw-bold py-0 sticky-top mt-2 mt-md-0" style="font-family: serif;">
 		<div class="container">
 			<!-- NAVBAR 3 MD -->
 			<div class="me-auto d-none d-md-block">
@@ -301,13 +301,13 @@ else {
 				</div>
 			</div>
 			<!-- NAVBAR 3 COLLAPSE -->
-			<div class="collapse navbar-collapse" id="navbarSupportedContent">
+			<div class="collapse navbar-collapse navbar-collapse-custom" id="navbarSupportedContent">
 				<ul class="navbar-nav ms-auto">
 					<li class="nav-item">
-						<a class="btn btn-danger-nav fw-bolder py-2 py-md-3 me-md-3" href="../index.php">HOME</a>
+						<a class="btn btn-danger btn-danger-nav fw-bolder py-2 py-md-3 me-md-3 w-100 rounded-0" href="../index.php">HOME</a>
 					</li>
 					<li class="nav-item">
-						<a class="btn btn-danger-nav fw-bolder py-2 py-md-3 pe-0 me-0" href="product.php">SHOP</a>
+						<a class="btn btn-danger btn-danger-nav fw-bolder py-2 py-md-3 me-0 w-100 rounded-0" href="product.php">SHOP</a>
 					</li>
 				</ul>
 			</div>
@@ -325,97 +325,101 @@ else {
 	<!-- WISHLIST -->
 	<div class="container mt-md-5 pt-md-3 text-center">
 		<div class="anchor-stickynav" id="wishlist"></div>
-		<div style="clear:both;" class="float-end h4 text-start fw-bolder text-secondary p-0 m-0">
-			<div class="nav-item dropdown btn-w-sort">
-				<div class="btn-w-sort d-grid">
-				<a class="btn btn-outline-danger fw-bold rounded-0 text-start d-flex align-items-center" href="#" data-bs-toggle="dropdown">
 <?php  
-    if (!isset($_SESSION['sort'])) {
-    	$_SESSION['sort_val'] = "Sort by latest";
-    	$_SESSION['sort'] = "DESC";
-    	$_SESSION['short_orderby'] = "id_produk";
+    if (!isset($_SESSION['sort_wish'])) {
+    	$_SESSION['sort_val_wish'] = "Sort by latest wishlist";
+    	$_SESSION['sort_wish'] = "DESC";
+    	$_SESSION['short_orderby_wish'] = "id_wishlist";
     }
     //Search by sort
     if (isset($_POST['sortby'])) {
-    	if ($_POST['sortby'] == "Sort by latest" || $_POST['sortby'] == "Sort by oldest") {
-			$_SESSION['sort_val'] = $_POST['sortby'];
-			$_SESSION['short_orderby'] = "id_produk";    		
+    	if ($_POST['sortby'] == "Sort by latest wishlist" || $_POST['sortby'] == "Sort by oldest wishlist") {
+			$_SESSION['sort_val_wish'] = $_POST['sortby'];
+			$_SESSION['short_orderby_wish'] = "id_wishlist";    		
     	}
     	else {
-			$_SESSION['sort_val'] = $_POST['sortby'];
-			$_SESSION['short_orderby'] = "harga_produk";
+			$_SESSION['sort_val_wish'] = $_POST['sortby'];
+			$_SESSION['short_orderby_wish'] = "harga";
     	}
     }
     //Initial
-    if ($_SESSION['sort_val'] == "Sort by latest" || $_SESSION['sort_val'] == "Sort by price: high to low") {
-    	$_SESSION['sort'] = "DESC";
+    if ($_SESSION['sort_val_wish'] == "Sort by latest wishlist" || $_SESSION['sort_val_wish'] == "Sort by price: high to low") {
+    	$_SESSION['sort_wish'] = "DESC";
     } 
-    else $_SESSION['sort'] = "ASC";
+    else $_SESSION['sort_wish'] = "ASC";
 
 ?>
-					<?php echo $_SESSION['sort_val']; ?>
+<?php 
+// Show Data
+$order_by = $_SESSION['short_orderby_wish'];
+$sort = $_SESSION['sort_wish'];
+$search_fg = '%'. $_SESSION['s_fg'] .'%';
+$search_key = '%'. $_SESSION['s_key'] .'%';
+$no = 1;
+
+$query = 
+
+
+$username = $_SESSION['username'];
+$query = "SELECT * FROM wishlist WHERE username = '$username'";
+$res2 = mysqli_query($conn, $query);
+$JumlahData = mysqli_num_rows($res2);
+?>
+		<!-- Navbar 4 -->
+		<div class="navbar my-2 mt-4 navbar-expand-md h4 text-start fw-bolder text-secondary p-0 m-0">
+		<div class="mx-auto mx-md-0 my-auto navbar-brand h4 fw-bolder text-secondary">
+			Showing&nbsp;<span id="showing"><?php echo $JumlahData; ?></span>&nbsp;results
+		</div>
+
+		<div class="mx-auto mx-md-0 ms-md-auto h4 fw-bolder text-secondary p-0 m-0 w-sm-100">
+			<div class="nav-item dropdown btn-w-sort">
+				<a class="btn btn-outline-danger fw-bold rounded-0 text-start d-flex align-items-center" href="#" data-bs-toggle="dropdown">
+					<?php echo $_SESSION['sort_val_wish']; ?>
                     <span class="right-icon ms-auto">
                         <i class="fa-solid fa-chevron-down"></i>
                     </span>
 				</a>
-				</div>
 				<ul class="dropdown-menu bg-danger w-100 fade-down rounded-0">
 					<!-- Filter 3 -->
 					<form method="post" action="#wishlist">
 					<li class="d-grid gap-2">
-						<input type="submit" name="sortby" value="Sort by latest" class="btn btn-danger fw-bold text-start <?php if ($_SESSION['sort_val'] == "Sort by latest") echo"d-none"; ?>">
+						<input type="submit" name="sortby" value="Sort by latest wishlist" class="btn btn-danger fw-bold text-start <?php if ($_SESSION['sort_val_wish'] == "Sort by latest wishlist") echo"d-none"; ?>">
 					</li>
 					<li class="d-grid gap-2">
-						<input type="submit" name="sortby" value="Sort by oldest" class="btn btn-danger fw-bold text-start <?php if ($_SESSION['sort_val'] == "Sort by oldest") echo"d-none"; ?>">
+						<input type="submit" name="sortby" value="Sort by oldest wishlist" class="btn btn-danger fw-bold text-start <?php if ($_SESSION['sort_val_wish'] == "Sort by oldest wishlist") echo"d-none"; ?>">
 					</li>
 					<li class="d-grid gap-2">
-						<input type="submit" name="sortby" value="Sort by price: low to high" class="btn btn-danger fw-bold text-start <?php if ($_SESSION['sort_val'] == "Sort by price: low to high") echo"d-none"; ?>">
+						<input type="submit" name="sortby" value="Sort by price: low to high" class="btn btn-danger fw-bold text-start <?php if ($_SESSION['sort_val_wish'] == "Sort by price: low to high") echo"d-none"; ?>">
 					</li>
 					<li class="d-grid gap-2">
-						<input type="submit" name="sortby" value="Sort by price: high to low" class="btn btn-danger fw-bold text-start <?php if ($_SESSION['sort_val'] == "Sort by price: high to low") echo"d-none"; ?>">
+						<input type="submit" name="sortby" value="Sort by price: high to low" class="btn btn-danger fw-bold text-start <?php if ($_SESSION['sort_val_wish'] == "Sort by price: high to low") echo"d-none"; ?>">
 					</li>
 					</form>
 				</ul>
 			</div>
 		</div>
-<?php 
-// Show Data
-$order_by = $_SESSION['short_orderby'];
-$sort = $_SESSION['sort'];
-$search_fg = '%'. $_SESSION['s_fg'] .'%';
-$search_key = '%'. $_SESSION['s_key'] .'%';
-$no = 1;
-
-$query = "SELECT * FROM produk WHERE grade_produk LIKE ? AND (grade_produk LIKE ? OR nama_produk LIKE ? OR harga_produk LIKE ? OR ket_produk LIKE ?) ORDER BY $order_by $sort";
-$search = $conn->prepare($query);
-$search->bind_param('sssss', $search_fg, $search_key, $search_key, $search_key, $search_key);
-$search->execute();
-$res1 = $search->get_result();
-
-$username = $_SESSION['username'];
-$query = "SELECT * FROM wishlist WHERE username LIKE ?";
-$search = $conn->prepare($query);
-$search->bind_param('s', $username);
-$search->execute();
-$res2 = $search->get_result();
-$JumlahData = mysqli_num_rows($res2);
-?>
-		<div class="h4 text-start fw-bolder text-secondary d-flex align-items-center">
-			Showing&nbsp;<div id="showing"><?php echo $JumlahData; ?></div>&nbsp;results
 		</div>
-		<div class="container bg-secondary w-100 mt-md-3 mb-md-5" style="height: 1px;"></div>
+		<!-- End Navbar 4 -->
+		<div class="container bg-secondary w-100 mt-3 mb-3 mt-md-3 mb-md-5" style="height: 1px;"></div>
+
 		<div class="row mt-md-2">
 <?php
-if ($res1->num_rows > 0) {
-	while ($row = $res1->fetch_assoc()) {
-		$username = $_SESSION['username'];
-		$id_produk = $row['id_produk'];
-		$sql_wish = "SELECT * FROM wishlist";
-		$res_wish = mysqli_query($conn,$sql_wish);
-		while($row_wish = mysqli_fetch_array($res_wish)){
-			if ($row_wish['username'] == $username && $row_wish['id_produk'] == $id_produk) {
+$username = $_SESSION['username'];
+$sql_wish = "SELECT * FROM wishlist WHERE username = '$username' ORDER BY $order_by $sort";
+$res_wish = mysqli_query($conn,$sql_wish);
+if (mysqli_num_rows($res_wish) > 0) {
+	while($row_wish = mysqli_fetch_array($res_wish)){
+		$id_produk = $row_wish['id_produk'];
+		$sql = "SELECT * FROM produk WHERE id_produk = '$id_produk' AND grade_produk LIKE ? AND (grade_produk LIKE ? OR nama_produk LIKE ? OR harga_produk LIKE ? OR ket_produk LIKE ?)";
+		$search = $conn->prepare($sql);
+		$search->bind_param('sssss', $search_fg, $search_key, $search_key, $search_key, $search_key);
+		$search->execute();
+		$result = $search->get_result();
+		$row = mysqli_fetch_assoc($result);
+		if (mysqli_num_rows($result) > 0) {
+		
 ?>
-			<div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-5 mb-sm-3 mb-lg-4 bg-white" " id="tr_<?php echo $row_wish['id_produk']?>">
+			<div class="col-6 col-sm-6 col-md-4 col-lg-3 px-vs-1 px-vmd-2 mb-4 mb-sm-3 mb-lg-4 bg-white" id="tr_<?php echo $row_wish['id_produk']?>">
 				<div class="anchor-stickynav" id="<?php echo $row['id_produk']; ?>"></div>
 				<div class="col-12 rounded product-shadow pb-md-2 zoom h-100 d-flex align-items-center flex-column">
 					<figure class="imghvr-fade mb-md-2 rounded-top bg-transparent">
@@ -428,9 +432,9 @@ if ($res1->num_rows > 0) {
 					<a href="#" class="btn h5 text-dark btn-item px-md-2"><?php echo $row['nama_produk']; ?></a>
 					<div class="mt-auto w-100">
 						<div class="h4 text-danger fw-bolder pt-md-2 px-md-2">Rp <?php echo number_format($row['harga_produk'] , 0, ',', '.'); ?>,00</div>
-						<div class="row px-2 px-md-3 pb-md-2">
+						<div class="row px-2 px-md-3 pb-2">
 							<!-- delete from wishlist -->						
-							<div class="col-6">
+							<div class="col-6 pe-vs-1">
 								<div class="d-grid gap-2"><button class="wishbutton btn rounded-0 fw-bolder border-2 btn-outline-danger" onclick="dell_wishlist('<?php echo $row['id_produk']?>')"><i class="fa-solid fa-trash fa-lg"></i></button></div>
 							</div>
 							<!-- add to cart -->
@@ -442,6 +446,7 @@ if (isset($_SESSION['username'])) {
 	$id_produk = $row['id_produk'];
 	$sql = "SELECT * FROM cart";
 	$result = mysqli_query($conn,$sql);
+	$not_found = "";
 	while($row_cart = mysqli_fetch_array($result)){
 		if ($row_cart['username'] == $username && $row_cart['id_produk'] == $id_produk) {
 			$btn_cart = "btn-success";
@@ -450,7 +455,7 @@ if (isset($_SESSION['username'])) {
 	}
 }
 ?>
-							<div class="col-6">
+							<div class="col-6 ps-vs-1">
 								<div class="d-grid gap-2"><button class="btn rounded-0 fw-bolder border-2 <?php echo $btn_cart; ?>" id="btn_cart<?php echo $row['id_produk']; ?>" onclick="add_cart('<?php echo $row['id_produk']?>')"><?php echo $btn_cart_fa ?></button></div>
 							</div>
 						</div>
@@ -458,26 +463,29 @@ if (isset($_SESSION['username'])) {
 				</div>
 			</div>
 <?php 
-			}
+		}
+		else {
+			$not_found = "Data Not Found";
 		}
 	} 
 } else { 
-?> 
-    		<div class="h4 text-center fw-bolder text-secondary">Data Not Found</div>
-<?php 
+	$not_found = "Data Not Found";
 } 
 ?>
+			<div class="h4 text-center fw-bolder text-secondary"><?php echo $not_found; ?></div>
+			<div class="d-none not_found h4 text-center fw-bolder text-secondary">Data Not Found</div>
 		</div>
 	</div>
 	<!-- FOOTER -->
-	<div class="container mt-md-5 pt-md-4 text-center">
-		<div class="h4 text-center fw-bolder text-secondary p-0 m-0">
+	<footer class="mt-auto">
+	<div class="container mt-3 mt-md-5 pt-md-3 text-center fixed-">
+		<h4 class="text-center fw-bolder text-secondary p-0 m-0">
 			Social Media
-		</div>
+		</h4>
 		<div class="h2 text-center fw-bolder text-secondary p-0 m-0">
 			Contact Me @UNISOPV-STORE
 		</div>
-		<div class="line bg-secondary mx-auto mt-md-3 mb-md-5 pb-md-2"></div>
+		<div class="line bg-secondary mx-auto mt-2 mt-md-3 mb-4 mb-md-5 pb-md-2"></div>
 	</div>
 	<div class="container-fluid bg-dark">
 		<div class="container py-md-5">
@@ -492,7 +500,7 @@ if (isset($_SESSION['username'])) {
 				</div>
 				<div class="col-md-6 d-flex align-items-center flex-column justify-content-center">
 					<div class="mx-auto text-light">
-						<table class="table table-borderless text-light h4 mb-0">
+						<table class="table table-borderless text-light h4 mb-0 align-middle">
 							<tr>
 								<td><i class="fa-solid fa-check text-danger"></i></td>
 								<td>Instagram</td>
@@ -517,6 +525,7 @@ if (isset($_SESSION['username'])) {
 			</div>
 		</div>
 	</div>
+	</footer>
 
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
@@ -608,8 +617,7 @@ if (isset($_SESSION['username'])) {
 		
 	});
 	</script>
-
-		<script>
+	<script>
 		const Custom = Swal.mixin({
 			toast: true,
 			position: 'top-right',
@@ -651,8 +659,8 @@ if (isset($_SESSION['username'])) {
 						else {
 							cart = "9+";
 						}
-						//sweetalert
 						$("#show_cart").attr("value",cart);
+						//sweetalert
 						Custom.fire({
 						  	icon: 'success',
 						  	title : 'Successfully added to cart',
@@ -697,7 +705,11 @@ if (isset($_SESSION['username'])) {
 						wishlist = "9+";
 					}
 					$("#show_wishlist").attr("value",wishlist);
-					$("#showing").html(wishlist);
+					//other
+					$("#showing").html(count_wishlist);
+					if (count_wishlist <= 0) {
+						$(".not_found").removeClass("d-none");
+					}
 					//dellwishlist
 					$('#tr_'+id).fadeOut(200);
 					//sweetalert

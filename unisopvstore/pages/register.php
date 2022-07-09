@@ -19,14 +19,14 @@
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.33.1/sweetalert2.min.css" rel="stylesheet">
 	<link rel="stylesheet" href="../css/style.css">
 </head>
-<body style="overflow-x: hidden;">
+<body class="d-flex flex-column min-vh-100" style="overflow-x: hidden;">
 	<!-- NAVBAR 1 -->
 	<div id="navbar"></div>
 	<nav class="navbar navbar-dark bg-dark text-light ">
 		<div class="container">
 			<div class="mx-auto mx-md-0 me-md-auto">
-				Wellcome to <a href="../index.php" class="text-decoration-none pe-4 me-4 border-end">Unisopv-Store</a>
-				Social Media:
+				<span class="d-none d-md-inline">Wellcome to</span> <a href="../index.php" class="text-decoration-none pe-4 me-4 border-end">Unisopv-Store</a>
+				<span class="d-none d-md-inline">Social Media:</span>
 				<a class="btn btn-light btn-fb rounded-circle btn-lg-custom mx-1" href=""
 				data-cooltipz-dir="bottom-left" aria-label="Facebook">
 					<i class="fab fa-facebook-f"></i>
@@ -40,17 +40,11 @@
 					<i class="fab fa-instagram"></i>
 				</a>
 			</div>
-			<div class="me-auto me-md-0 ms-md-auto">
-				<a class="btn btn-outline-light" href="login.php#login">Login</a>
-			</div>
-			<!-- NAVBAR 2.1 SM -->
-			<div class="d-flex ms-auto d-block d-md-none pt-3 me-3">
-				<a class="btn btn-cart btn-dark btn-dark-custom rounded-circle pt-2 me-2" href="">
-					<i class="fa-solid fa-heart badge-cart" value=9+></i>
-				</a>
-				<a class="btn btn-cart btn-dark btn-dark-custom rounded-circle pt-2" href="">
-					<i class="fa-solid fa-cart-shopping badge-cart" value=9+></i>
-				</a>
+			<div class="container border-top mt-2 bg-light d-flex d-md-none"></div>
+			<div class="mx-auto mx-md-0 ms-md-auto mt-2 mt-md-0 col-12 col-md-auto px-3 px-md-0">
+				<div class="row me-0 ">
+					<a class="btn btn-outline-light col-auto ms-auto" href="login.php#login">Login</a>
+				</div>
 			</div>
 		</div>
 	</nav>
@@ -59,23 +53,14 @@
 		<div class="container">
 			<a href="../index.php" class="w-50 mx-auto mx-md-0 d-block d-md-none" data-aos="fade-right"><img class="navbar-brand w-100" src="../images/eva-logo.png"></a>
 			<a href="../index.php" class="w-25 mx-auto mx-md-0 d-none d-md-block" data-aos="fade-right"><img class="navbar-brand w-100" src="../images/eva-logo.png"></a>
-			<form class="d-flex mx-auto col-12 col-md-5">
-				<input class="form-control form-search form-control-lg rounded-0 rounded-start" type="search" placeholder="Search">
-				<button class="btn btn-lg btn-dark btn-dark-custom rounded-0 rounded-end" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+			<form method="post" action="product.php#product" class="d-flex ms-auto col-12 col-md-5">
+				<input type="search" class="form-control form-search form-control-lg rounded-0 rounded-start" placeholder="Search" name="s_keyword" value="">
+				<button class="btn btn-lg btn-dark btn-dark-custom rounded-0 rounded-end" type="submit" name="search"><i class="fa-solid fa-magnifying-glass"></i></button>
 			</form>
-			<!-- NAVBAR 2.2 MD -->
-			<div class="d-flex ms-auto">
-				<a class="btn btn-cart btn-dark btn-dark-custom rounded-circle pt-2 me-4" href="">
-					<i class="fa-solid fa-heart badge-cart" value=0></i>
-				</a>
-				<a class="btn btn-cart btn-dark btn-dark-custom rounded-circle pt-2" href="">
-					<i class="fa-solid fa-cart-shopping badge-cart" value=0></i>
-				</a>
-			</div>
 		</div>
 	</nav>
 	<!-- NAVBAR 3 -->
-	<nav class="navbar navbar-expand-lg navbar-light bg-danger text-dark fw-bold py-0 sticky-top" style="font-family: serif;">
+	<nav class="navbar navbar-expand-md navbar-light bg-danger text-dark fw-bold py-0 sticky-top mt-2 mt-md-0" style="font-family: serif;">
 		<div class="container">
 			<!-- NAVBAR 3 MD -->
 			<div class="me-auto d-none d-md-block">
@@ -84,21 +69,21 @@
 						<i class="fa-solid fa-bars me-2"></i> ALL GUNDAM GRADES
 					</a>
 					<ul class="dropdown-menu bg-danger w-100 fade-down">
-						<form method="post" action="search.php">
+						<form method="post" action="product.php#product">
 						<li class="d-grid gap-2">
-							<input type="submit" name="filter-grade" value="[SD] Super Deformed" class="btn btn-danger fw-bolder text-start" >
+							<input type="submit" name="s_filter_grade" value="[SD] Super Deformed" class="btn btn-danger fw-bolder text-start">
 						</li>
 						<li class="d-grid gap-2">
-							<input type="submit" name="filter-grade" value="[HG] High Grade" class="btn btn-danger fw-bolder text-start" >
+							<input type="submit" name="s_filter_grade" value="[HG] High Grade" class="btn btn-danger fw-bolder text-start">
 						</li>
 						<li class="d-grid gap-2">
-							<input type="submit" name="filter-grade" value="[RG] Real Grade" class="btn btn-danger fw-bolder text-start" >
+							<input type="submit" name="s_filter_grade" value="[RG] Real Grade" class="btn btn-danger fw-bolder text-start">
 						</li>
 						<li class="d-grid gap-2">
-							<input type="submit" name="filter-grade" value="[MG] Master Grade" class="btn btn-danger fw-bolder text-start" >
+							<input type="submit" name="s_filter_grade" value="[MG] Master Grade" class="btn btn-danger fw-bolder text-start">
 						</li>
 						<li class="d-grid gap-2">
-							<input type="submit" name="filter-grade" value="[PG] Perfect Grade" class="btn btn-danger fw-bolder text-start" >
+							<input type="submit" name="s_filter_grade" value="[PG] Perfect Grade" class="btn btn-danger fw-bolder text-start">
 						</li>
 						</form>
 					</ul>
@@ -114,34 +99,34 @@
 						<i class="fa-solid fa-bars me-2"></i> ALL GUNDAM GRADES
 					</a>
 					<ul class="dropdown-menu bg-danger w-100 fade-down">
-						<form method="post" action="search.php">
+						<form method="post" action="product.php#product">
 						<li class="d-grid gap-2">
-							<input type="submit" name="filter-grade" value="[SD] Super Deformed" class="btn btn-danger fw-bolder text-start" >
+							<input type="submit" name="s_filter_grade" value="[SD] Super Deformed" class="btn btn-danger fw-bolder text-start">
 						</li>
 						<li class="d-grid gap-2">
-							<input type="submit" name="filter-grade" value="[HG] High Grade" class="btn btn-danger fw-bolder text-start" >
+							<input type="submit" name="s_filter_grade" value="[HG] High Grade" class="btn btn-danger fw-bolder text-start">
 						</li>
 						<li class="d-grid gap-2">
-							<input type="submit" name="filter-grade" value="[RG] Real Grade" class="btn btn-danger fw-bolder text-start" >
+							<input type="submit" name="s_filter_grade" value="[RG] Real Grade" class="btn btn-danger fw-bolder text-start">
 						</li>
 						<li class="d-grid gap-2">
-							<input type="submit" name="filter-grade" value="[MG] Master Grade" class="btn btn-danger fw-bolder text-start" >
+							<input type="submit" name="s_filter_grade" value="[MG] Master Grade" class="btn btn-danger fw-bolder text-start">
 						</li>
 						<li class="d-grid gap-2">
-							<input type="submit" name="filter-grade" value="[PG] Perfect Grade" class="btn btn-danger fw-bolder text-start" >
+							<input type="submit" name="s_filter_grade" value="[PG] Perfect Grade" class="btn btn-danger fw-bolder text-start">
 						</li>
 						</form>
 					</ul>
 				</div>
 			</div>
 			<!-- NAVBAR 3 COLLAPSE -->
-			<div class="collapse navbar-collapse" id="navbarSupportedContent">
+			<div class="collapse navbar-collapse navbar-collapse-custom" id="navbarSupportedContent">
 				<ul class="navbar-nav ms-auto">
 					<li class="nav-item">
-						<a class="btn btn-danger-nav fw-bolder py-2 py-md-3 me-md-3" href="../index.php">HOME</a>
+						<a class="btn btn-danger btn-danger-nav fw-bolder py-2 py-md-3 me-md-3 w-100 rounded-0" href="../index.php">HOME</a>
 					</li>
 					<li class="nav-item">
-						<a class="btn btn-danger-nav fw-bolder py-2 py-md-3 pe-0 me-0" href="product.php">SHOP</a>
+						<a class="btn btn-danger btn-danger-nav fw-bolder py-2 py-md-3 me-0 w-100 rounded-0" href="product.php">SHOP</a>
 					</li>
 				</ul>
 			</div>
@@ -150,7 +135,6 @@
 	<!-- HEADER -->
 	<div class=" bg-gra d-flex align-items-stretch" data-parallax="scroll" data-image-src="../images/banner2-img.jpg" data-aos="fade">
 		<div class="container d-flex align-items-stretch position-relative">
-			<div class="position-absolute top-0 end-0 pe-2 text-light fw-bolder"><span id="time"></span></div>
 			<div class="eva-font my-md-5 align-self-center text-center mx-auto" data-aos="fade-up" data-aos-delay="350">
 				<h2 class="fw-bolder eva-heading_title mt-4"># &nbsp;&nbsp;UNISOPV-STORE&nbsp;&nbsp; #</h2>
 				<h4 class="fw-bolder eva-heading_title mb-4">REGISTER</h4>
@@ -158,13 +142,13 @@
 		</div>
 	</div>
 	<!-- REGISTER -->
-	<div id="register"></div>
-	<div class="container mt-md-5 pt-md-3 text-start text-secondary">
-		<div class="h4 border-bottom d-inline-block pb-md-2 border-secondary border-3 mb-md-5 fw-bolder">
+	<div class="container mt-4 mt-md-5 pt-md-3 text-start text-secondary">
+		<div class="anchor-stickynav" id="register"></div>
+		<h4 class="border-bottom d-inline-block pb-md-2 border-secondary border-3 mb-4 mb-md-5 mt-2 mt-md-0 fw-bolder">
 			Register
-		</div>
+		</h4>
 		<form action="#navbar" method="POST">
-			<div class="h5">
+			<h4>
 				Username <span class="text-danger">*</span>
 				<div class="col-md-6 d-grid my-2 my-md-3">
 					<div class="input-group input-group-lg">
@@ -183,23 +167,24 @@
 						<input type="password" class="form-control rounded-0" name="cpassword" placeholder="Confirm Password" required>
 					</div>
 				</div>
-				<div class="col-md-2 d-grid mt-4">
+				<div class="col-md-2 d-grid mt-3 mt-md-4">
 					<button class="btn btn-lg btn-dark btn-dark-custom rounded-0 fw-bolder" type="submit" name="submit-register">REGISTER</button>
 				</div>
-			</div>
+			</h4>
 		</form>
 		<div class="my-2"></div>
 		<a href="login.php#login" class="btn-red">Already have an account?</a>
 	</div>
 	<!-- FOOTER -->
-	<div class="container mt-md-5 pt-md-4 text-center">
-		<div class="h4 text-center fw-bolder text-secondary p-0 m-0">
+	<footer class="mt-auto">
+	<div class="container mt-4 mt-md-5 pt-md-3 text-center">
+		<h4 class="text-center fw-bolder text-secondary p-0 m-0">
 			Social Media
-		</div>
+		</h4>
 		<div class="h2 text-center fw-bolder text-secondary p-0 m-0">
 			Contact Me @UNISOPV-STORE
 		</div>
-		<div class="line bg-secondary mx-auto mt-md-3 mb-md-5 pb-md-2" data-aos="fade-left"></div>
+		<div class="line bg-secondary mx-auto mt-2 mt-md-3 mb-4 mb-md-5 pb-md-2" data-aos="fade-left"></div>
 	</div>
 	<div class="container-fluid bg-dark">
 		<div class="container py-md-5">
@@ -212,9 +197,9 @@
 						© <a href="../index.php" class="text-decoration-none">Unisopv-Store</a>. All Rights Reserved.
 					</div>
 				</div>
-				<div class="col-md-6 d-flex align-items-center flex-column justify-content-center" data-aos="fade" data-aos-delay="450">
+				<div class="col-md-6 d-flex align-items-center flex-column justify-content-center">
 					<div class="mx-auto text-light">
-						<table class="table table-borderless text-light h4 mb-0">
+						<table class="table table-borderless text-light h4 mb-0 align-middle">
 							<tr>
 								<td><i class="fa-solid fa-check text-danger"></i></td>
 								<td>Instagram</td>
@@ -239,6 +224,7 @@
 			</div>
 		</div>
 	</div>
+	</footer>
 
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>

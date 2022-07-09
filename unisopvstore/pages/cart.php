@@ -1,29 +1,37 @@
 <?php 
 //Force move *jika terjadi error
-require_once '../process/error-handle.php';
-ob_start();
 //------------------------------
 
 include '../config/config.php';
 session_start();
-//Input page
-if (isset($_POST['s_pages'])) {
-	if (isset($_POST['s_page'])) {
-		$page = $_POST['s_page'];
-		header("Location: product.php?page=$page#product"); 
+$sweet_login = "<script>
+const Custom = Swal.mixin({
+	toast: true,
+	position: 'top-right',
+	showConfirmButton: false,
+	showCloseButton: true,
+	timer: 3000,
+	timerProgressBar: true,
+	keydownListenerCapture: true,
+	didOpen: (toast) => {
+		toast.addEventListener('mouseenter', Swal.stopTimer)
+		toast.addEventListener('mouseleave', Swal.resumeTimer)
 	}
-}
-//Show product
-if (isset($_POST['show'])) {
-	$_SESSION['show'] = $_POST['show'];
-	header("Location: product.php?page=1#product"); 
+})
+Custom.fire({
+	icon: 'warning',
+  	title : 'Please login first',
+})</script>";
+if (!isset($_SESSION['username'])) {
+	$_SESSION['massage'] = $sweet_login;
+	header("Location:../pages/login.php#login"); 
 }
 ?>
 <!DOCTYPE html>
 <html lang="en" >
 <head>
 	<meta charset="UTF-8">
-	<title>Shop - UnisopvStore</title>
+	<title>Cart - UnisopvStore</title>
 	<link rel="icon" href="../images/icon.png">
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -62,7 +70,7 @@ if (isset($_POST['show'])) {
 			<div class="container border-top mt-2 bg-light d-flex d-md-none"></div>
 			<div class="mx-auto mx-md-0 ms-md-auto mt-2 mt-md-0 col-12 col-md-auto px-3 px-md-0">
 				<?php if (!isset($_SESSION['username'])) { ?>
-				<div class="row me-0">
+				<div class="row me-0 ">
 					<a class="btn btn-outline-light col-auto ms-auto me-2" href="login.php#login">Login</a>
 					<a class="btn btn-outline-light col-auto" href="register.php#register">Register</a>
 				</div>
@@ -161,8 +169,8 @@ else {
 			<div class="d-flex ms-auto d-none d-md-none pt-3 me-3">
 				-- show wishlist --
 				<a class="btn btn-cart btn-dark btn-dark-custom rounded-circle pt-2 me-4" href="wishlist.php">
-					<i class="d-none" id="show_wishlist_primary" value="<?php echo intval($total_item_wishlist); ?>"></i>
-					<i class="fa-solid fa-heart badge-cart" id="show_wishlist" value="<?php echo intval($total_item_wishlist); ?>"></i>
+					<i class="d-none" id="show_cart_primary" value="<?php echo intval($total_item_wishlist); ?>"></i>
+					<i class="fa-solid fa-heart badge-cart" id="show_cart" value="<?php echo intval($total_item_wishlist); ?>"></i>
 				</a>
 				-- show cart --
 				<a class="btn btn-cart btn-dark btn-dark-custom rounded-circle pt-2" href="">
@@ -206,28 +214,23 @@ else {
     }
 ?>
 			<!-- Filter 1 -->
-			<form class="d-none d-md-flex mx-auto col-12 col-md-5" action="#product" method="post">
+			<form class="d-none d-md-flex mx-auto col-12 col-md-5" action="#wishlist" method="post">
 				<input type="search" class="form-control form-search form-control-lg rounded-0 rounded-start" placeholder="Search" name="s_keyword" value="<?php echo $_SESSION['s_key']; ?>"/>
 				<button class="btn btn-lg btn-dark btn-dark-custom rounded-0 rounded-end" type="submit" name="search"><i class="fa-solid fa-magnifying-glass"></i></button>
 			</form>
 			<!-- NAVBAR 2.2 MD -->
 			<div class="d-flex ms-auto">
 				<!-- show wishlist -->
-				<a class="btn btn-cart btn-dark btn-dark-custom rounded-circle pt-2 me-4" href="wishlist.php">
-					<i class="d-none" id="show_wishlist_primary" value="<?php echo intval($total_item_wishlist); ?>"></i>
-					<i class="fa-solid fa-heart badge-cart" id="show_wishlist" value="<?php echo intval($total_item_wishlist); ?>"></i>
+				<a class="btn btn-cart btn-dark btn-dark-custom rounded-circle pt-2 me-4" href="#">
+					<i class="d-none" id="" value="<?php echo intval($total_item_wishlist); ?>"></i>
+					<i class="fa-solid fa-heart badge-cart" id="" value="<?php echo intval($total_item_wishlist); ?>"></i>
 				</a>
 				<!-- show cart-->
-				<a class="btn btn-cart btn-dark btn-dark-custom rounded-circle pt-2" href="cart.php">
+				<a class="btn btn-cart btn-dark btn-dark-custom rounded-circle pt-2" href="">
 					<i class="d-none" id="show_cart_primary" value="<?php echo intval($total_item_cart); ?>"></i>
 					<i class="fa-solid fa-cart-shopping badge-cart" id="show_cart" value="<?php echo intval($total_item_cart); ?>"></i>
 				</a>
 			</div>
-			<!-- Filter 1 -->
-			<form class="d-flex d-md-none mx-auto col-12 col-md-5" action="#product" method="post">
-				<input type="search" class="form-control form-search form-control-lg rounded-0 rounded-start" placeholder="Search" name="s_keyword" value="<?php echo $_SESSION['s_key']; ?>"/>
-				<button class="btn btn-lg btn-dark btn-dark-custom rounded-0 rounded-end" type="submit" name="search"><i class="fa-solid fa-magnifying-glass"></i></button>
-			</form>
 		</div>
 	</nav>
 	<!-- NAVBAR 3 -->
@@ -241,7 +244,7 @@ else {
 					</a>
 					<ul class="dropdown-menu bg-danger w-100 fade-down">
 						<!-- Filter 2-md -->
-						<form method="post" action="#product">
+						<form method="post" action="#wishlist">
 						<li class="d-grid gap-2">
 							<input type="submit" name="s_filter_grade" value="ALL GRADES" class="btn btn-danger fw-bolder text-start <?php if ($_SESSION['s_fg_all']=="True"){ echo "d-none"; } ?>">
 						</li>
@@ -275,24 +278,21 @@ else {
 					</a>
 					<ul class="dropdown-menu bg-danger w-100 fade-down">
 						<!-- Filter 2-sm -->
-						<form method="post" action="#product">
+						<form method="post" action="#wishlist">
 						<li class="d-grid gap-2">
-							<input type="submit" name="s_filter_grade" value="ALL GRADES" class="btn btn-danger fw-bolder text-start <?php if ($_SESSION['s_fg_all']=="True"){ echo "d-none"; } ?>">
+							<input type="submit" name="s_filter_grade" value="[SD] Super Deformed" class="btn btn-danger fw-bolder text-start <?php if ($s_fg=="[SD] Super Deformed"){ echo "active"; } ?>">
 						</li>
 						<li class="d-grid gap-2">
-							<input type="submit" name="s_filter_grade" value="[SD] Super Deformed" class="btn btn-danger fw-bolder text-start <?php if ($_SESSION['s_fg']=="[SD] Super Deformed"){ echo "active"; } ?>">
+							<input type="submit" name="s_filter_grade" value="[HG] High Grade" class="btn btn-danger fw-bolder text-start <?php if ($s_fg=="[HG] High Grade"){ echo "active"; } ?>">
 						</li>
 						<li class="d-grid gap-2">
-							<input type="submit" name="s_filter_grade" value="[HG] High Grade" class="btn btn-danger fw-bolder text-start <?php if ($_SESSION['s_fg']=="[HG] High Grade"){ echo "active"; } ?>">
+							<input type="submit" name="s_filter_grade" value="[RG] Real Grade" class="btn btn-danger fw-bolder text-start <?php if ($s_fg=="[RG] Real Grade"){ echo "active"; } ?>">
 						</li>
 						<li class="d-grid gap-2">
-							<input type="submit" name="s_filter_grade" value="[RG] Real Grade" class="btn btn-danger fw-bolder text-start <?php if ($_SESSION['s_fg']=="[RG] Real Grade"){ echo "active"; } ?>">
+							<input type="submit" name="s_filter_grade" value="[MG] Master Grade" class="btn btn-danger fw-bolder text-start <?php if ($s_fg=="[MG] Master Grade"){ echo "active"; } ?>">
 						</li>
 						<li class="d-grid gap-2">
-							<input type="submit" name="s_filter_grade" value="[MG] Master Grade" class="btn btn-danger fw-bolder text-start <?php if ($_SESSION['s_fg']=="[MG] Master Grade"){ echo "active"; } ?>">
-						</li>
-						<li class="d-grid gap-2">
-							<input type="submit" name="s_filter_grade" value="[PG] Perfect Grade" class="btn btn-danger fw-bolder text-start <?php if ($_SESSION['s_fg']=="[PG] Perfect Grade"){ echo "active"; } ?>">
+							<input type="submit" name="s_filter_grade" value="[PG] Perfect Grade" class="btn btn-danger fw-bolder text-start <?php if ($s_fg=="[PG] Perfect Grade"){ echo "active"; } ?>">
 						</li>
 						</form>
 					</ul>
@@ -305,7 +305,7 @@ else {
 						<a class="btn btn-danger btn-danger-nav fw-bolder py-2 py-md-3 me-md-3 w-100 rounded-0" href="../index.php">HOME</a>
 					</li>
 					<li class="nav-item">
-						<a class="btn btn-danger btn-danger-nav fw-bolder py-2 py-md-3 me-0 text-light w-100 rounded-0" href="#">SHOP</a>
+						<a class="btn btn-danger btn-danger-nav fw-bolder py-2 py-md-3 me-0 w-100 rounded-0" href="product.php">SHOP</a>
 					</li>
 				</ul>
 			</div>
@@ -316,297 +316,221 @@ else {
 		<div class="container d-flex align-items-stretch position-relative">
 			<div class="eva-font my-md-5 align-self-center text-center mx-auto" data-aos="fade-up" data-aos-delay="350">
 				<h2 class="fw-bolder eva-heading_title mt-4"># &nbsp;&nbsp;UNISOPV-STORE&nbsp;&nbsp; #</h2>
-				<h4 class="fw-bolder eva-heading_title mb-4">SHOP</h4>
+				<h4 class="fw-bolder eva-heading_title mb-4">WISHLIST</h4>
 			</div>
 		</div>
 	</div >
-	<!-- PRODUCT -->
+	<!-- WISHLIST -->
 	<div class="container mt-md-5 pt-md-3 text-center">
-		<div class="anchor-stickynav" id="product"></div>
+		<div class="anchor-stickynav" id="wishlist"></div>
 <?php  
-    if (!isset($_SESSION['sort'])) {
-    	$_SESSION['sort_val'] = "Sort by latest";
-    	$_SESSION['sort'] = "DESC";
-    	$_SESSION['short_orderby'] = "id_produk";
+    if (!isset($_SESSION['sort_cart'])) {
+    	$_SESSION['sort_val_cart'] = "Sort by latest cart";
+    	$_SESSION['sort_val_cart'] = "DESC";
+    	$_SESSION['short_orderby_cart'] = "id_cart";
     }
     //Search by sort
     if (isset($_POST['sortby'])) {
-    	if ($_POST['sortby'] == "Sort by latest" || $_POST['sortby'] == "Sort by oldest") {
-			$_SESSION['sort_val'] = $_POST['sortby'];
-			$_SESSION['short_orderby'] = "id_produk";    		
+    	if ($_POST['sortby'] == "Sort by latest cart" || $_POST['sortby'] == "Sort by oldest cart") {
+			$_SESSION['sort_val_cart'] = $_POST['sortby'];
+			$_SESSION['short_orderby_cart'] = "id_cart";    		
     	}
     	else {
-			$_SESSION['sort_val'] = $_POST['sortby'];
-			$_SESSION['short_orderby'] = "harga_produk";
+			$_SESSION['sort_val_cart'] = $_POST['sortby'];
+			$_SESSION['short_orderby_cart'] = "harga";
     	}
     }
     //Initial
-    if ($_SESSION['sort_val'] == "Sort by latest" || $_SESSION['sort_val'] == "Sort by price: high to low") {
-    	$_SESSION['sort'] = "DESC";
+    if ($_SESSION['sort_val_cart'] == "Sort by latest cart" || $_SESSION['sort_val_cart'] == "Sort by price: high to low") {
+    	$_SESSION['sort_cart'] = "DESC";
     } 
-    else $_SESSION['sort'] = "ASC";
+    else $_SESSION['sort_cart'] = "ASC";
 
 ?>
 <?php 
 // Show Data
-$order_by = $_SESSION['short_orderby'];
-$sort = $_SESSION['sort'];
+$order_by = $_SESSION['short_orderby_cart'];
+$sort = $_SESSION['sort_cart'];
 $search_fg = '%'. $_SESSION['s_fg'] .'%';
 $search_key = '%'. $_SESSION['s_key'] .'%';
 $no = 1;
-if (!isset($_SESSION['show'])) {
-	$_SESSION['show'] = 12;
-}
 
-//-Pagination-
-// Jumlah data per halaman
-$page = (isset($_GET['page']))? (int) $_GET['page'] : 1;
-$_SESSION['page_product'] = $page;
-$limit = $_SESSION['show'];
-$limitStart = ($page - 1) * $limit;
-//-----------
+$query = 
 
-$query = "SELECT * FROM produk WHERE grade_produk LIKE ? AND (grade_produk LIKE ? OR nama_produk LIKE ? OR harga_produk LIKE ? OR ket_produk LIKE ?) ORDER BY $order_by $sort LIMIT $limitStart, $limit";
-$search = $conn->prepare($query);
-$search->bind_param('sssss', $search_fg, $search_key, $search_key, $search_key, $search_key);
-$search->execute();
-$res1 = $search->get_result();
-$query = "SELECT * FROM produk WHERE grade_produk LIKE ? AND (grade_produk LIKE ? OR nama_produk LIKE ? OR harga_produk LIKE ? OR ket_produk LIKE ?) ORDER BY $order_by $sort";
-$search = $conn->prepare($query);
-$search->bind_param('sssss', $search_fg, $search_key, $search_key, $search_key, $search_key);
-$search->execute();
-$res2 = $search->get_result();
+
+$username = $_SESSION['username'];
+$query = "SELECT * FROM cart WHERE username = '$username'";
+$res2 = mysqli_query($conn, $query);
 $JumlahData = mysqli_num_rows($res2);
 ?>
 		<!-- Navbar 4 -->
 		<div class="navbar my-2 mt-4 navbar-expand-md h4 text-start fw-bolder text-secondary p-0 m-0">
-		<div class="my-auto navbar-brand h4 fw-bolder text-secondary">
-			Showing 1-<?php echo $limit." of ".$JumlahData; ?> results
+		<div class="mx-auto mx-md-0 my-auto navbar-brand h4 fw-bolder text-secondary">
+			Showing&nbsp;<span id="showing"><?php echo $JumlahData; ?></span>&nbsp;results
 		</div>
-		<button class="navbar-toggler border-0 rounded-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbar4" aria-controls="navbar4" aria-expanded="false" aria-label="Toggle navigation">
-			<i class="fa-solid fa-bars fa-lg"></i>
-		</button>
-		<div class="collapse navbar-collapse" id="navbar4">
-		<div class="nav-item dropdown btn-w-show me-auto mt-2 mt-md-0">
-			<a class="btn btn-outline-danger fw-bold rounded-0 text-start d-flex align-items-center" href="#" data-bs-toggle="dropdown">
-				<?php echo $_SESSION['show']; ?>
-                <span class="right-icon ms-auto">
-                    <i class="fa-solid fa-chevron-down"></i>
-                </span>
-			</a>
-			<ul class="dropdown-menu bg-danger w-100 fade-down rounded-0">
-				<!-- filter 4 -->
-				<form method="post" action="#product">
-				<li class="d-grid gap-2">
-					<input type="submit" name="show" value="4" class="btn btn-danger fw-bold text-start <?php if ($_SESSION['show'] == "4") echo"d-none"; ?>">
-				</li>
-				<li class="d-grid gap-2">
-					<input type="submit" name="show" value="12" class="btn btn-danger fw-bold text-start <?php if ($_SESSION['show'] == "12") echo"d-none"; ?>">
-				</li>
-				<li class="d-grid gap-2">
-					<input type="submit" name="show" value="20" class="btn btn-danger fw-bold text-start <?php if ($_SESSION['show'] == "20") echo"d-none"; ?>">
-				</li>
-				<li class="d-grid gap-2">
-					<input type="submit" name="show" value="28" class="btn btn-danger fw-bold text-start <?php if ($_SESSION['show'] == "28") echo"d-none"; ?>">
-				</li>
-				</form>
-			</ul>
-		</div>
-		<div class="nav-item dropdown btn-w-sort ms-md-auto mt-2 mt-md-0">
-			<a class="btn btn-outline-danger fw-bold rounded-0 text-start d-flex align-items-center" href="#" data-bs-toggle="dropdown">
-				<?php echo $_SESSION['sort_val']; ?>
-                <span class="right-icon ms-auto">
-                    <i class="fa-solid fa-chevron-down"></i>
-                </span>
-			</a>
-			<ul class="dropdown-menu bg-danger w-100 fade-down rounded-0">
-				<!-- Filter 3 -->
-				<form method="post" action="#product">
-				<li class="d-grid gap-2">
-					<input type="submit" name="sortby" value="Sort by latest" class="btn btn-danger fw-bold text-start <?php if ($_SESSION['sort_val'] == "Sort by latest") echo"d-none"; ?>">
-				</li>
-				<li class="d-grid gap-2">
-					<input type="submit" name="sortby" value="Sort by oldest" class="btn btn-danger fw-bold text-start <?php if ($_SESSION['sort_val'] == "Sort by oldest") echo"d-none"; ?>">
-				</li>
-				<li class="d-grid gap-2">
-					<input type="submit" name="sortby" value="Sort by price: low to high" class="btn btn-danger fw-bold text-start <?php if ($_SESSION['sort_val'] == "Sort by price: low to high") echo"d-none"; ?>">
-				</li>
-				<li class="d-grid gap-2">
-					<input type="submit" name="sortby" value="Sort by price: high to low" class="btn btn-danger fw-bold text-start <?php if ($_SESSION['sort_val'] == "Sort by price: high to low") echo"d-none"; ?>">
-				</li>
-				</form>
-			</ul>
-		</div>
+
+		<div class="mx-auto mx-md-0 ms-md-auto h4 fw-bolder text-secondary p-0 m-0 w-sm-100">
+			<div class="nav-item dropdown btn-w-sort">
+				<a class="btn btn-outline-danger fw-bold rounded-0 text-start d-flex align-items-center" href="#" data-bs-toggle="dropdown">
+					<?php echo $_SESSION['sort_val_cart']; ?>
+                    <span class="right-icon ms-auto">
+                        <i class="fa-solid fa-chevron-down"></i>
+                    </span>
+				</a>
+				<ul class="dropdown-menu bg-danger w-100 fade-down rounded-0">
+					<!-- Filter 3 -->
+					<form method="post" action="#wishlist">
+					<li class="d-grid gap-2">
+						<input type="submit" name="sortby" value="Sort by latest cart" class="btn btn-danger fw-bold text-start <?php if ($_SESSION['sort_val_cart'] == "Sort by latest cart") echo"d-none"; ?>">
+					</li>
+					<li class="d-grid gap-2">
+						<input type="submit" name="sortby" value="Sort by oldest cart" class="btn btn-danger fw-bold text-start <?php if ($_SESSION['sort_val_cart'] == "Sort by oldest cart") echo"d-none"; ?>">
+					</li>
+					<li class="d-grid gap-2">
+						<input type="submit" name="sortby" value="Sort by price: low to high" class="btn btn-danger fw-bold text-start <?php if ($_SESSION['sort_val_cart'] == "Sort by price: low to high") echo"d-none"; ?>">
+					</li>
+					<li class="d-grid gap-2">
+						<input type="submit" name="sortby" value="Sort by price: high to low" class="btn btn-danger fw-bold text-start <?php if ($_SESSION['sort_val_cart'] == "Sort by price: high to low") echo"d-none"; ?>">
+					</li>
+					</form>
+				</ul>
+			</div>
 		</div>
 		</div>
 		<!-- End Navbar 4 -->
-		<div class="container bg-secondary w-100 mt-2 mb-3 mt-md-3 mb-md-5" style="height: 1px;"></div>
+		<div class="container bg-secondary w-100 mt-3 mb-3 mt-md-3 mb-md-5" style="height: 1px;"></div>
 
-		<div class="row mt-md-2">
+		<div class="mt-md-2 table-responsive">
+			<table class="table table-borderless align-middle" id="table">
+			<thead>
+				<tr class="h5 table-dark">
+					<td colspan="2" class="text-start">Product</td>
+					<td>Price</td>
+					<td>Qty</td>
+					<td>Total Price</td>
+					<td>Act</td>
+				</tr>
+				<tr>
+					<td>
+					</td>
+				</tr>
+			</thead>
+			<tbody>
 <?php
-$no = $limitStart + 1;
-if ($res1->num_rows > 0) {
-	while ($row = $res1->fetch_assoc()) {
+$username = $_SESSION['username'];
+$sql_wish = "SELECT * FROM cart WHERE username = '$username' ORDER BY $order_by $sort";
+$res_wish = mysqli_query($conn,$sql_wish);
+$not_found = "";
+$total_all = 0;
+if (mysqli_num_rows($res_wish) > 0) {
+	while($row_wish = mysqli_fetch_array($res_wish)){
+		$id_produk = $row_wish['id_produk'];
+		$sql = "SELECT * FROM produk WHERE id_produk = '$id_produk' AND grade_produk LIKE ? AND (grade_produk LIKE ? OR nama_produk LIKE ? OR harga_produk LIKE ? OR ket_produk LIKE ?)";
+		$search = $conn->prepare($sql);
+		$search->bind_param('sssss', $search_fg, $search_key, $search_key, $search_key, $search_key);
+		$search->execute();
+		$result = $search->get_result();
+		$row = mysqli_fetch_assoc($result);
+		if (mysqli_num_rows($result) > 0) {
+			$harga_total = $row_wish['harga']*$row_wish['jumlah'];
+			$total_all = $total_all + $harga_total;
 ?>
-			<div class="col-6 col-sm-6 col-md-4 col-lg-3 px-vs-1 px-vmd-2 mb-4 mb-sm-3 mb-lg-4 bg-white">
-				<div class="anchor-stickynav" id="<?php echo $row['id_produk']; ?>"></div>
-				<div class="col-12 rounded product-shadow pb-md-2 zoom h-100 d-flex align-items-center flex-column">
-					<figure class="imghvr-fade mb-md-2 rounded-top bg-transparent">
-						<img src="../images/product/<?php echo $row['img_produk']; ?>" class="w-100 pb-md-2 bg-primary">
-							<figcaption class="p-0 m-0 bg-danger">
-								<img src="../images/product-hover/<?php echo $row['img_produk-hover']; ?>" class="w-100">
-							</figcaption>
-					</figure>
-					<div class="h5 text-secondary fw-bolder px-md-2"><?php echo $row['grade_produk']; ?></div>
-					<a href="#" class="btn h5 text-dark btn-item px-md-2"><?php echo $row['nama_produk']; ?></a>
-					<div class="mt-auto w-100">
-						<div class="h4 text-danger fw-bolder pt-md-2 px-md-2">Rp <?php echo number_format($row['harga_produk'] , 0, ',', '.'); ?>,00</div>
-						<div class="row px-2 px-md-3 pb-2">
-							<!-- add to wishlist -->
-<?php 
-$btn_wishlist = "btn-outline-dark";
-$btn_wishlist_fa = "<i class='fa-solid fa-heart-circle-plus fa-lg' id='btn_wishlist_fa".$row['id_produk']."'></i>";
-if (isset($_SESSION['username'])) {
-	$username = $_SESSION['username'];
-	$id_produk = $row['id_produk'];
-	$sql = "SELECT * FROM wishlist";
-	$result = mysqli_query($conn,$sql);
-	while($row_wishlist = mysqli_fetch_array($result)){
-		if ($row_wishlist['username'] == $username && $row_wishlist['id_produk'] == $id_produk) {
-			$btn_wishlist = "btn-outline-danger";
-			$btn_wishlist_fa = "<i class='fa-solid fa-heart fa-lg' id='btn_wishlist_fa".$row['id_produk']."'></i>";
-		}
-	}
-}
-?>							
-							<div class="col-6 pe-vs-1">
-								<div class="d-grid gap-2"><button class="wishbutton btn rounded-0 fw-bolder border-2 <?php echo $btn_wishlist; ?>" id="btn_wishlist<?php echo $row['id_produk']; ?>" onclick="add_wishlist('<?php echo $row['id_produk']?>')"><?php echo $btn_wishlist_fa ?></button></div>
-							</div>
-							<!-- add to cart -->
-<?php 
-$btn_cart = "btn-outline-dark";
-$btn_cart_fa = "<i class='fa-solid fa-cart-plus fa-lg' id='btn_cart_fa".$row['id_produk']."'></i>";
-if (isset($_SESSION['username'])) {
-	$username = $_SESSION['username'];
-	$id_produk = $row['id_produk'];
-	$sql = "SELECT * FROM cart";
-	$result = mysqli_query($conn,$sql);
-	while($row_cart = mysqli_fetch_array($result)){
-		if ($row_cart['username'] == $username && $row_cart['id_produk'] == $id_produk) {
-			$btn_cart = "btn-success";
-			$btn_cart_fa = "<i class='fa-solid fa-circle-check fa-lg' id='btn_cart_fa".$row['id_produk']."'></i>";
-		}
-	}
-}
-?>
-							<div class="col-6 ps-vs-1">
-								<div class="d-grid gap-2"><button class="btn rounded-0 fw-bolder border-2 <?php echo $btn_cart; ?>" id="btn_cart<?php echo $row['id_produk']; ?>" onclick="add_cart('<?php echo $row['id_produk']?>')"><?php echo $btn_cart_fa ?></button></div>
-							</div>
-						</div>
-					</div>
+		<div class="anchor-stickynav" id="<?php echo $row['id_produk']; ?>"></div>
+		<tr class="table-secondary qty_all" id="tr_<?php echo $row_wish['id_cart']?>">
+			<td class="">
+				<figure class="imghvr-fade bg-transparent">
+					<img src="../images/product/<?php echo $row['img_produk']; ?>" class="w-100 img-figure">
+						<figcaption class="p-0 m-0">
+							<img src="../images/product-hover/<?php echo $row['img_produk-hover']; ?>" class="w-100 img-figure">
+						</figcaption>
+				</figure>
+			</td>
+			<td class="text-start">
+				<div class="h5 text-secondary fw-bolder"><?php echo $row['grade_produk']; ?></div>
+				<a href="#" class="btn h5 text-dark btn-item text-danger"><?php echo $row['nama_produk']; ?></a>
+			</td>
+			<!-- PRICE -->
+			<td>
+				<div class="h4 text-danger fw-bolder">Rp <?php echo number_format($row['harga_produk'] , 0, ',', '.'); ?>,00</div>
+				<span class="price d-none"><?php echo $row['harga_produk']?></span>
+			</td>
+			<!-- QTY -->
+			<td class="col-md-2 text-start">
+				<div class="d-flex">
+				<button class="sub btn btn-sm btn-dark btn-dark-custom rounded-0 rounded-start" type="button" name=""><i class="fa-solid fa-minus"></i></button>
+				<input type="number" min="0" step="1" class="qty form-control rounded-0" placeholder="" value="<?php echo $row_wish['jumlah'];?>" onkeypress="inputinteger(event)" id="qty_<?php echo $row_wish['id_cart']; ?>">
+				<button class="add btn btn-sm btn-dark btn-dark-custom rounded-0 rounded-end" type="button" name=""><i class="fa-solid fa-plus"></i></button>
 				</div>
-			</div>
+			</td>
+			<!-- TOTAL PRICE -->
+			<td class="text-start">
+				<div class="total_price_show h4 text-danger fw-bolder">Rp <?php echo number_format($harga_total , 0, ',', '.'); ?>,00
+				</div>
+				<span class="total_price d-none" id="total_price<?php echo $row_wish['id_cart']; ?>"><?php echo $harga_total;?></span>
+			</td>
+			<!-- ACT -->	
+			<td class="">
+				<!-- delete from wishlist -->						
+				<button class="wishbutton btn rounded-0 fw-bolder border-2 btn-outline-danger" onclick="dell_cart('<?php echo $row_wish['id_cart']?>')"><i class="fa-solid fa-trash fa-lg"></i></button>
+			</td>
+		</tr>
+		<tr id="tr2_<?php echo $row_wish['id_cart']?>">
+			<td>
+			</td>
+		</tr>
 <?php 
-		} 
-	} else { 
-?> 
-    		<div class="h4 text-center fw-bolder text-secondary">Data Not Found</div>
-<?php 
+		} else {
+			$not_found = "Data Not Found";
+		}
 	} 
+} else { 
+	$not_found = "Data Not Found";
+} 
 ?>
+<?php if ($not_found != "") { ?>
+			<tr class="text-center">
+				<td colspan="6">
+					<div class="h4 text-center fw-bolder text-secondary"><?php echo $not_found?></div>
+				<td>
+			</tr>
+<?php } ?>
+			<tr class="not_found d-none text-center">
+				<td colspan="6">
+					<div class="h4 text-center fw-bolder text-secondary"><?php echo $not_found?></div>
+					<div class="h4 text-center fw-bolder text-secondary">Data Not Found</div>
+				<td>
+			</tr>
+			<tr class="table-dark h4">
+				<!-- TOTAL ALL-->
+				<td colspan="4" class="text-end">
+					Total :
+				</td>
+				<td class="text-start">
+					<div id="total_all">Rp <?php echo number_format($total_all , 0, ',', '.'); ?>,00</div>
+					<div class="d-none" id="total_all_val"><?php echo $total_all ?></div>
+				</td>
+				<td></td>
+			</tr>
+			</tbody>
+			</table>
 		</div>
-		<!-- PAGINATION SETUP -->
-  		<nav aria-label="Page navigation example" class="mt-3 mt-md-4 navbar justify-content-center ">
-  			<div class="center-nav">
-    		<ul class="pagination m-0">
-<?php
-// Jika page = 1, maka LinkPrev disable
-if($page == 1) { 
-?>        
-        		<!-- link Previous Page disable --> 
-				<li class="page-item disabled">
-					<span class="page-link"><i class="fa-solid fa-angles-left"></i></span>
-				</li>
-				<li class="page-item disabled">
-					<span class="page-link"><i class="fa-solid fa-angle-left"></i></span>
-				</li>
-<?php
-}
-else { 
-	$LinkPrev = ($page > 1)? $page - 1 : 1;  
-?>
-				<li><a href="product.php?page=1#product" class="page-link"><i class="fa-solid fa-angles-left"></i></a></li>
-            	<li><a href="product.php?page=<?php echo $LinkPrev; ?>#product" class="page-link"><i class="fa-solid fa-angle-left"></i></a></li>
-<?php
-}
-?>
-
-<?php
-// Hitung semua jumlah data yang berada pada tabel produk
-$JumlahData = mysqli_num_rows($res2);
-// Hitung jumlah halaman yang tersedia
-$jumlahPage = ceil($JumlahData / $limit);
-// Jumlah link number 
-$jumlahNumber = 2; 
-// Untuk awal link number
-$startNumber = ($page > $jumlahNumber)? $page - $jumlahNumber : 1; 
-// Untuk akhir link number
-$endNumber = ($page < ($jumlahPage - $jumlahNumber))? $page + $jumlahNumber : $jumlahPage; 
-for($i = $startNumber; $i <= $endNumber; $i++) {
-    $linkActive = ($page == $i)? 'active' : '';
-?>
-          		<li><a href="product.php?page=<?php echo $i; ?>#product" class="page-link <?php echo $linkActive; ?>"><?php echo $i; ?></a></li>
-<?php
-}
-?>
-      
-<!-- link Next Page -->
-<?php       
-if($page >= $jumlahPage) { 
-?>
-			<li class="page-item disabled">
-				<span class="page-link"><i class="fa-solid fa-angle-right"></i></span>
-			</li>
-			<li class="page-item disabled">
-				<span class="page-link"><i class="fa-solid fa-angles-right"></i></i></span>
-			</li>
-<?php
-}
-else {
-    $linkNext = ($page < $jumlahPage)? $page + 1 : $jumlahPage;
-?>
-    		<li><a href="product.php?page=<?php echo $linkNext; ?>#product" class="page-link"><i class="fa-solid fa-angle-right"></i></a></li>
-    		<li><a href="product.php?page=<?php echo $jumlahPage; ?>#product" class="page-link"><i class="fa-solid fa-angles-right"></i></a></li>
-<?php
-}
-?>
-    		</ul>
-    		</div>
-    		<!-- Pages jump -->
-    		<div class="navbar-nav mx-auto mx-md-0 ms-md-auto col-8 col-md-3 col-lg-3 mt-2 mt-md-0">
-				<form class="input-group" method="post" action="#product">
-					<input type="number" min="1" max="<?php echo $jumlahPage; ?>" step="1" class="form-control" placeholder="<?php echo $page." / ".$jumlahPage." pages" ?>" name="s_page" required="">
-					<button class="btn btn-outline-dark" name="s_pages"><i class="fa-solid fa-magnifying-glass"></i></button>
-				</form>
-    		</div>
-  		</nav>
 	</div>
 	<!-- FOOTER -->
 	<footer class="mt-auto">
-	<div class="container mt-3 mt-md-5 pt-md-3 text-center">
+	<div class="container mt-3 mt-md-3 pt-md-3 text-center fixed-">
 		<h4 class="text-center fw-bolder text-secondary p-0 m-0">
 			Social Media
 		</h4>
 		<div class="h2 text-center fw-bolder text-secondary p-0 m-0">
 			Contact Me @UNISOPV-STORE
 		</div>
-		<div class="line bg-secondary mx-auto mt-2 mt-md-3 mb-4 mb-md-5 pb-md-2" data-aos="fade-left"></div>
+		<div class="line bg-secondary mx-auto mt-2 mt-md-3 mb-4 mb-md-5 pb-md-2"></div>
 	</div>
 	<div class="container-fluid bg-dark">
 		<div class="container py-md-5">
 			<div class="row">
 				<div class="col-md-6 d-flex align-items-center flex-column justify-content-center">
-					<div class="col-md-6 mx-auto" data-aos="fade-right">
+					<div class="col-md-6 mx-auto">
 						<img class="w-100" src="../images/eva-logo2.png"></a>
 					</div>
 					<div class="p-0 m-0 text-secondary">
@@ -722,7 +646,7 @@ else {
 							  	icon: 'success',
 							  	title: 'Profile photo successfully changed',
 							}).then(function() {
-					    		window.location = 'product.php';
+					    		window.location = 'wishlist.php';
 							});
 	                	}
 	              	});
@@ -747,129 +671,93 @@ else {
 			}
 		})
 		var max_num = 9;
-<?php if (isset($_SESSION['username'])) { ?> 
-		function add_cart(id){
+		
+        function dell_cart(id){
+        	//var total_price = parseInt($("#total_price"+id).text());
+			//var total_all = parseInt($("#total_all_val").text());
+			//var sum = total_all - total_price;
+			//$("#qty_"+id).val(0);
 			jQuery.ajax({
-				url:'../process/add_to-cart.php',
+				url:'../process/del_from-cart.php',
 				type:'POST',
-				data:'id='+id,
-				success:function(result){
-					btn_cart = 'btn-outline-dark';
-					btn_cart_fa = 'fa-solid fa-cart-plus fa-lg';
-
-					btn_cart2 = 'btn-success';
-					btn_cart_fa2 = 'fa-solid fa-circle-check fa-lg';
-
+				data:'iid='+id,
+				success:function(result) {
+					//shocart
 					var count_cart = parseInt($("#show_cart_primary").attr('value'));
-
-				    if ($("#btn_cart"+id).hasClass(btn_cart)) {
-						$("#btn_cart"+id).removeClass(btn_cart).addClass(btn_cart2);
-						$("#btn_cart_fa"+id).removeClass(btn_cart_fa).addClass(btn_cart_fa2);
-						//showcart
-						$("#show_cart_primary").attr("value",count_cart+1);
-						var count_cart = parseInt($("#show_cart_primary").attr('value'));
-						if (count_cart <= max_num) {
-							cart = count_cart;
-						}
-						else {
-							cart = "9+";
-						}
-						//sweetalert
-						$("#show_cart").attr("value",cart);
-						Custom.fire({
-						  	icon: 'success',
-						  	title : 'Successfully added to cart',
-						})
-			    	}
-			    	else {
-						$("#btn_cart"+id).removeClass(btn_cart2).addClass(btn_cart);
-						$("#btn_cart_fa"+id).removeClass(btn_cart_fa2).addClass(btn_cart_fa);
-						//showcart
-						$("#show_cart_primary").attr("value",count_cart-1);
-						var count_cart = parseInt($("#show_cart_primary").attr('value'));
-						if (count_cart <= max_num) {
-							cart = count_cart;
-						}
-						else {
-							cart = "9+";
-						}						
-						$("#show_cart").attr("value",cart);
-						//sweetalert
-						Custom.fire({
-						  	icon: 'success',
-						  	title : 'Successfully removed from cart',
-						})
-			    	}
+					$("#show_cart_primary").attr("value",count_cart-1);
+					var count_cart = parseInt($("#show_cart_primary").attr('value'));
+					if (count_cart <= max_num) {
+						cart = count_cart;
+					}
+					else {
+						cart = "9+";
+					}
+					$("#show_cart").attr("value",cart);
+					//other
+					$("#showing").html(count_cart);
+					if (count_cart <= 0) {
+						$(".not_found").removeClass("d-none");
+					}
+					//totalcart
+					//$('#total_all').text("Rp "+sum.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")+",00");
+					//dellcart
+					$('#tr_'+id).remove();
+					$('#tr2_'+id).remove();
+					calc_total();
+					//sweetalert
+					Custom.fire({
+					  	icon: 'success',
+					  	title : 'Successfully deleted from cart',
+					})
 				}
 			});
         };
-        function add_wishlist(id){
-			jQuery.ajax({
-				url:'../process/add_to-wishlist.php',
-				type:'POST',
-				data:'id='+id,
-				success:function(result){
-					btn_wishlist = 'btn-outline-dark';
-					btn_wishlist_fa = 'fa-solid fa-heart-circle-plus fa-lg';
+	</script>
+	<script>
+	    function inputinteger(evt){
+	        var ch = String.fromCharCode(evt.which);
+	        if(!(/[0-9]/.test(ch))){
+	            evt.preventDefault();
+	        }
+	    }
+	</script>
+	<script>
+		$('.add').on('click', function() {
+			var parent = $(this).closest('tr');
+			var qty = parseInt($('.qty',parent).val());
+				$('.qty',parent).val(qty+1);
+		});
+		$('.sub').click(function() {
+			var parent = $(this).closest('tr');
+			var qty = parseInt($('.qty',parent).val());
+			if (qty > 0) {
+				$('.qty',parent).val(qty-1);
+			};
+		});
 
-					btn_wishlist2 = 'btn-outline-danger';
-					btn_wishlist_fa2 = 'fa-solid fa-heart fa-lg';
-
-					var count_wishlist = parseInt($("#show_wishlist_primary").attr('value'));
-
-				    if ($("#btn_wishlist"+id).hasClass(btn_wishlist)) {
-						$("#btn_wishlist"+id).removeClass(btn_wishlist).addClass(btn_wishlist2);
-						$("#btn_wishlist_fa"+id).removeClass(btn_wishlist_fa).addClass(btn_wishlist_fa2);
-						//showishlist
-						$("#show_wishlist_primary").attr("value",count_wishlist+1);
-						var count_wishlist = parseInt($("#show_wishlist_primary").attr('value'));
-						if (count_wishlist <= max_num) {
-							wishlist = count_wishlist;
-						}
-						else {
-							wishlist = "9+";
-						}						
-						$("#show_wishlist").attr("value",wishlist);
-						//sweetalert
-						Custom.fire({
-						  	icon: 'success',
-						  	title : 'Successfully added to wishlist',
-						})
-			    	}
-			    	else {
-						$("#btn_wishlist"+id).removeClass(btn_wishlist2).addClass(btn_wishlist);
-						$("#btn_wishlist_fa"+id).removeClass(btn_wishlist_fa2).addClass(btn_wishlist_fa);
-						//showishlist
-						$("#show_wishlist_primary").attr("value",count_wishlist-1);
-						var count_wishlist = parseInt($("#show_wishlist_primary").attr('value'));
-						if (count_wishlist <= max_num) {
-							wishlist = count_wishlist;
-						}
-						else {
-							wishlist = "9+";
-						}						
-						$("#show_wishlist").attr("value",wishlist);
-						//sweetalert
-						Custom.fire({
-						  	icon: 'success',
-						  	title : 'Successfully removed from wishlist',
-						})
-			    	}
-				}
+		calc_total();
+		$(".qty_all").on('keyup click', function() {
+			var parent = $(this).closest('tr');
+			var price  = parseInt($('.price',parent).text());
+			var qty = parseInt($('.qty',parent).val());
+			var total = 0;
+			var total_qty = 0;
+			if (qty > 0) {
+				total = qty*price;
+			}
+			var rp = "Rp "+total.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")+",00";
+			$('.total_price_show',parent).text(rp);
+			$('.total_price',parent).text(total);
+			calc_total();
+		});
+		function calc_total() {
+			var sum = 0;
+			$(".total_price").each(function() {
+				sum += parseFloat($(this).text());
 			});
-		};
-<?php 
-} 
-else {
-?>
-		function add_wishlist(id) {
-			window.location="../process/login-required.php";
+			$('#total_all').text("Rp "+sum.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")+",00");
+			$('#total_all_val').text(sum);
 		}
-		function add_cart(id) {
-			window.location="../process/login-required.php";
-		}
-<?php } ?>
 	 </script>
 </body>
 </html>
-<?php ob_end_flush();?>

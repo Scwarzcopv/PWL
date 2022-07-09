@@ -29,7 +29,7 @@ session_start();
 </head>
 <body style="overflow-x: hidden;">
 	<!-- NAVBAR 1 -->
-	<nav class="navbar navbar-dark bg-dark text-light ">
+	<nav class="navbar navbar-dark bg-dark text-light">
 		<div class="container">
 			<div class="mx-auto mx-md-0 me-md-auto">
 				Wellcome to <a href="../index.php" class="text-decoration-none pe-4 me-4 border-end">Unisopv-Store</a>
